@@ -1,0 +1,49 @@
+name: Build Windows EXE
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Compile
+        run: |
+          mkdir out
+          javac -cp "lib/json-20251224.jar" -d out src/com/myapp/*.java
+
+      - name: Copy icon
+        run: |
+          copy icon.png out\icon.png
+
+      - name: Create JAR
+        run: |
+          jar --create --file app.jar -C out .
+
+      - name: Package EXE
+        run: |
+          jpackage ^
+            --type exe ^
+            --name MyTrayApp ^
+            --input . ^
+            --main-jar app.jar ^
+            --main-class com.myapp.Main ^
+            --java-options "-Dfile.encoding=UTF-8" ^
+            --win-shortcut ^
+            --win-menu
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-exe
+          path: "*.exe"
