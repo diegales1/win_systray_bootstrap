@@ -18,11 +18,13 @@ jobs:
           java-version: 17
 
       - name: Compile
+        shell: cmd
         run: |
           mkdir out
-          javac -cp "lib/json-20251224.jar" -d out src/com/myapp/*.java
+          javac -cp "lib/json-20251224.jar" -d out src\com\myapp\*.java
 
       - name: Copy icon
+        shell: cmd
         run: |
           copy icon.png out\icon.png
 
@@ -31,6 +33,7 @@ jobs:
           jar --create --file app.jar -C out .
 
       - name: Package EXE
+        shell: cmd
         run: |
           jpackage ^
             --type exe ^
