@@ -1,0 +1,8 @@
+{
+  "appName": "My Tray App",
+  "interval": 5,
+  "version": "1.0.0",
+  "updateUrl": "https://yourserver.com/version.txt",
+  "log.level": "INFO"
+
+}
